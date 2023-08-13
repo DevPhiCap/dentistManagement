@@ -1,0 +1,199 @@
+body{
+    margin: 0px;
+    padding: 0px;
+    position: relative;
+}
+h2{
+  background-color: #009879;
+  color: white;
+  padding: 10px;
+}
+.container {
+    background-color: rgba(0, 0, 0, 0);
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+    border-radius: 10px;
+    text-align: center;
+    transition: background-color 0.3s ease;
+  }
+.form {
+    width: 100%;
+    font-size: 18px;
+    padding: 0px 20px;
+    box-sizing: border-box; /* Add this property to include padding in width calculation */
+    font-family: sans-serif;
+}
+.stcol{
+  text-align: left;
+}
+
+.inputform {
+    width: 100%;
+    height: 40px;
+    border-radius: 20px;
+    border: 1px solid gray;
+    padding: 5px;
+    padding-left: 10px;
+    margin: 5px 0; /* Remove left and right margin, adjust top and bottom margin */
+    box-sizing: border-box; /* Add this property to include padding in width calculation */
+}
+
+.submit {
+    transition: 0.2s;
+    border: none;
+    background-color: deepskyblue;
+    color: white;
+    border-radius: 20px;
+    width: 50%;
+    padding: 5px;
+    margin: 10px 0; /* Remove left and right margin, adjust top and bottom margin */
+    box-sizing: border-box; /* Add this property to include padding in width calculation */
+    font-size: 20px;
+}
+
+.submit:hover{
+    transition: 0.2s;
+    background-color: cornflowerblue;
+}
+
+.submit:active{
+    transition: none;
+    background-color: deepskyblue;
+}
+
+.dataTable {
+    display: flex;
+    justify-content: center;
+}
+  
+.data {
+    width: calc(100% - 20px);
+    margin: 20px;
+    border-spacing: 0px;
+    text-align: center;
+    font-family: sans-serif;
+}
+
+.data th{
+    background-color: #009879;
+    color: #ffffff;
+    padding: 0;
+}
+
+.data th:first-child{
+    border-radius: 10px 0 0 0px;
+}
+
+.data th:last-child{
+    border-radius: 0 10px 0px 0;
+}
+
+
+.data tbody tr {
+    border-bottom: 1px solid #dddddd;
+    background-color: rgba(204, 255, 255, 0.8);
+    padding: 0;
+}
+.data tbody tr:nth-of-type(even) {
+  background-color: #fefefe;
+}
+.data tr{
+    transition: 0.3s;
+    height: 40px;
+    box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+}
+
+.data tr:hover{
+    transition: 0.3s;
+    height: 50px;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0px 5px 5px rgba(0, 0, 0, 0.5);
+    cursor: pointer;
+    color: #009879;
+}
+
+.data tr:active{
+    transition: 0.1s;
+    height: 40px;
+    box-shadow: none;
+}
+
+/* modal */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    background-color: rgba(0, 0, 0, 0.2);
+  }
+  
+  .container.active .modal-content {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  
+  .modal.active {
+    display: block;
+  }
+  
+  .modal-content {
+    background-color: #fefefe;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    border-radius: 10px;
+    width: 40%;
+    height: fit-content;
+    opacity: 0;
+    
+  }
+  
+  .close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    margin-left: 20px;
+    transition: color 0.3s ease;
+  }
+  .addBtn{
+    text-align: right;
+  }
+  
+  .close:hover,
+  .close:focus {
+    transition: 0.3s;
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+  }
+  
+  .container.normal-bg {
+    background-color: rgba(0, 0, 0, 0.2);
+  }
+
+  /* image */
+  .enlarged-image {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-color: rgba(0, 0, 0, 0.8);
+    z-index: 9999;
+    cursor: pointer;
+  }

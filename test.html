@@ -1,0 +1,76 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="customer.css">
+</head>
+<body>
+  <div id="container" class="container">
+    <button id="openModal" class="submit" onclick="openModal()">Them benh an</button>
+
+    <div id="myModal" class="modal">
+          <div id="modalContent" class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <form action="" method="POST" enctype="multipart/form-data">
+              <table class="form">
+                  <tr>
+                      <th colspan="2">
+                          <h3>Them benh an</h3>
+                      </th>
+                  </tr>
+                  <tr>
+                      <td class="stcol">
+                          <span>Mô tả</span>
+                      </td>
+                      <td>
+                          <input class="inputform" type="text" name="mota" value="Mo ta" placeholder="Mo ta chan doan">
+                      </td>
+                  </tr>
+                  <tr>
+                      <td class="stcol">
+                          <span>Ngày bắt đầu</span>
+                      </td>
+                      <td>
+                          <input class="inputform" type="date" name="startdate">
+                      </td>
+                  </tr>
+                  <tr>
+                      <td class="stcol">
+                          <span>Ngày hoàn thành</span>
+                      </td>
+                      <td>
+                          <input class="inputform" type="date" name="enddate">
+                      </td>
+                  </tr>
+                  <tr>
+                      <td class="stcol">
+                          <span>Ảnh trước khi điều trị</span>
+                      </td>
+                      <td>
+                          <input class="inputform" type="file" name="befimg" id="befImgFileInput" onchange="handleImageUpload('befImgFileInput')">
+                      </td>
+                  </tr>
+                  <tr>
+                      <td class="stcol">
+                          <span>Ảnh sau khi điều trị</span>
+                      </td>
+                      <td>
+                          <input class="inputform" type="file"name="aftimg" id="aftImgFileInput" onchange="handleImageUpload('aftImgFileInput')">
+                      </td>
+                  </tr>
+                  <tr>
+                      <td></td>
+                      <td class="addBtn">
+                          <input type="submit" value="Add" class="submit">
+                      </td>
+                  </tr>
+              </table>
+            </form>
+          </div>
+      </div>
+  </div>
+
+    <script src="test.js"></script>
+</body>
+</html>
