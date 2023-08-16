@@ -32,7 +32,7 @@ $conn->close();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ho so benh nhan</title>
+    <title>Hồ sơ bệnh nhân</title>
     <link rel="stylesheet" href="../css/customer.css">
 </head>
 <body>
@@ -40,9 +40,14 @@ $conn->close();
     <div id="container" class="container">
         <button onclick="redirectToCustomerTable()" class="submit">Back</button>
 
-        <?php echo "<h2>Ho so benh nhan " . $patientName . "</h2>"; ?>
+        <?php echo "<h2>Hồ sơ bệnh nhân " . $patientName . "</h2>"; ?>
         
         <button id="insertBtn" class="submit">Thêm bệnh án</button>
+        <!-- search -->
+        <div class="searchDiv">
+            <input type="text" id="searchInput" class="searchInput" onkeyup="searchTable()" placeholder="Tìm bằng mô tả..." />
+            <!-- <button id="searchBtn" class="searchBtn" onClick="searchTable()">Tìm</button> -->
+        </div>
         <!-- insert form -->
         <div id="insertModal" class="modal">
             <div id="modalContent" class="modal-content">
@@ -170,16 +175,16 @@ $conn->close();
 
         <!-- data table -->
         <div class="dataTable">
-            <table class="data">
+            <table id="customerTable" class="data">
                 <thead>
                     <tr class="head">
                         <th>Stt</th>
-                        <th>Mota</th>
-                        <th>Ngay bat dau</th>
-                        <th>Ngay hoan thanh</th>
-                        <th>Truoc dieu tri</th>
-                        <th>Sau dieu tri</th>
-                        <th>Action</th>
+                        <th>Mô tả</th>
+                        <th>Ngày bắt đầu</th>
+                        <th>Ngày hoàn thành</th>
+                        <th>Trước điều trị</th>
+                        <th>Sau điều trị</th>
+                        <th>Chức năng</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -217,18 +222,18 @@ $conn->close();
                                 echo "<img src='" . $row['aftimg'] . "' alt='after' style='width: 100px; height: auto;' onclick='enlargeImage(this)'>";
                             }
                             echo "</td>";
-
                             echo "<td class='button-cell'>
-                                    <button class='update-btn'onClick='openUpdateDetailsModal(".$row['detailsid'].")'>Sửa</Button>
-                                    <div class='delete-div'>
-                                        <form method='POST' action='deleteDetails.php'>
+                                <button class='open-btn' id='openBtn_". $row['detailsid'] ."' onclick='toggleButtons(". $row['detailsid'] .")'>Open</button>
+                                <div class='btn-div' id='btnDiv_". $row['detailsid'] ."' style='display: none;'>
+                                    <button class='update-btn' onClick='openUpdateDetailsModal(".$row['detailsid'].")'>Sửa</Button>
+                                    <form method='POST' action='deleteDetails.php'>
                                         <input type='hidden' name='patientid' value='" . $row['patientid'] . "'>
                                         <input type='hidden' name='detailsid' value='" . $row['detailsid'] . "'>
                                         <button class='delete-btn' type='submit'>Xóa</button>
-                                        </form>
-                                    </div>
+                                    </form>
+                                    <span class='closeBtnDiv' onclick='toggleButtons(". $row['detailsid'] .")'>&times;</span>
+                                </div>
                                 </td>";
-                            
                             echo "</tr>";
                             $count++;
                         }
@@ -245,6 +250,8 @@ $conn->close();
 
     <script src="../javascript/patientDetails.js"></script>
     <script src="../javascript/modal.js"></script>
+    <script src="../javascript/search.js"></script>
+    <script src="../javascript/buttonDiv.js"></script>
     <script>
         function enlargeImage(image) {
             var enlargedImage = document.createElement("div");

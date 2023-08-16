@@ -21,11 +21,11 @@ $conn->close();
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="../css/customer.css">
-  <title>Quan ly khach hang</title>
+  <title>Quản lý khách hàng</title>
 </head>
 <body>
     <div id="container" class="container">
-        <h2>quan ly khach hang</h2>
+        <h2>Quản lý khách hàng</h2>
         <button id="insertBtn" class="submit">Thêm khách hàng</button>
         <!-- search -->
         <div class="searchDiv">
@@ -170,12 +170,12 @@ $conn->close();
                             echo "<td class='button-cell'>
                                 <button class='open-btn' id='openBtn_". $row['patientid'] ."' onclick='toggleButtons(". $row['patientid'] .")'>Open</button>
                                 <div class='btn-div' id='btnDiv_". $row['patientid'] ."' style='display: none;'>
-                                <button class='update-btn'onClick='openUpdatePatientModal(".$row['patientid'].")'>Sửa</Button>
-                                <form method='POST' action='deleteCustomer.php'>
-                                    <input type='hidden' name='patientid' value='". $row['patientid'] ."'>
-                                    <button class='delete-btn' type='submit'>Xóa</button>
-                                </form>
-                                <span class='closeBtnDiv' onclick='toggleButtons(". $row['patientid'] .")'>&times;</span>
+                                    <button class='update-btn' onClick='openUpdatePatientModal(".$row['patientid'].")'>Sửa</Button>
+                                    <form method='POST' action='deleteCustomer.php'>
+                                        <input type='hidden' name='patientid' value='". $row['patientid'] ."'>
+                                        <button class='delete-btn' type='submit'>Xóa</button>
+                                    </form>
+                                    <span class='closeBtnDiv' onclick='toggleButtons(". $row['patientid'] .")'>&times;</span>
                                 </div>
                             </td>";
                             echo "</tr>";
@@ -194,43 +194,7 @@ $conn->close();
 
     <script src="../javascript/modal.js"></script>
     <script src="../javascript/sort.js"></script>
-    <script>
-        function searchTable() {
-        // Get the input value entered by the user
-        var input = document.getElementById('searchInput').value.toLowerCase();
-
-        // Get all the rows of the table
-        var table = document.getElementById('customerTable');
-        var rows = table.getElementsByTagName('tr');
-
-        // Iterate through each row and hide/show based on the input value
-        for (var i = 0; i < rows.length; i++) {
-            var name = rows[i].getElementsByTagName('td')[1]; // Assuming the name is in the first column
-
-            if (name) {
-            var nameText = name.textContent.toLowerCase();
-
-            // Check if the name contains the input value
-            if (nameText.includes(input)) {
-                rows[i].style.display = '';
-            } else {
-                rows[i].style.display = 'none';
-            }
-            }
-        }
-        }
-        function toggleButtons(patientId) {
-            var openBtn = document.getElementById('openBtn_' + patientId);
-            var btnDiv = document.getElementById('btnDiv_' + patientId);
-
-            if (openBtn.style.display === 'none') {
-                openBtn.style.display = '';
-                btnDiv.style.display = 'none';
-            } else {
-                openBtn.style.display = 'none';
-                btnDiv.style.display = '';
-            }
-        }
-    </script>
+    <script src="../javascript/search.js"></script>
+    <script src="../javascript/buttonDiv.js"></script>
 </body>
 </html>

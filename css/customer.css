@@ -218,6 +218,7 @@ h2{
   .update-btn,
   .delete-btn {
     width: 100px;
+    height: fit-content;
     transition: 0.3s;
     color: white;
     border: none;
