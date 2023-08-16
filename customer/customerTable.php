@@ -224,10 +224,8 @@ $conn->close();
             var btnDiv = document.getElementById('btnDiv_' + patientId);
 
             if (openBtn.style.display === 'none') {
-                setTimeout(function() {
-                    openBtn.style.display = '';
-                    btnDiv.style.display = 'none';
-                }, 10);
+                openBtn.style.display = '';
+                btnDiv.style.display = 'none';
             } else {
                 openBtn.style.display = 'none';
                 btnDiv.style.display = '';
