@@ -27,7 +27,13 @@ $conn->close();
     <div id="container" class="container">
         <h2>quan ly khach hang</h2>
         <button id="insertBtn" class="submit">Thêm khách hàng</button>
-<!-- insert form -->
+        <!-- search -->
+        <div class="searchDiv">
+            <input type="text" id="searchInput" class="searchInput" onkeyup="searchTable()" placeholder="Tìm bằng tên..." />
+            <!-- <button id="searchBtn" class="searchBtn" onClick="searchTable()">Tìm</button> -->
+        </div>
+        
+        <!-- insert form -->
         <div id="insertModal" class="modal">
             <div id="modalContent" class="modal-content">
             <span class="closeInsert">&times;</span>
@@ -138,7 +144,7 @@ $conn->close();
 
             <!-- data table -->
         <div class="dataTable">
-            <table class="data">
+            <table id="customerTable" class="data">
                 <thead>
                     <tr class="head">
                         <th>Stt</th>
@@ -162,14 +168,16 @@ $conn->close();
                             echo "<td>" . $row['phoneno'] . "</td>";
                             echo "<td>" . $row['address'] . "</td>";
                             echo "<td class='button-cell'>
-                                    <button class='update-btn'onClick='openUpdatePatientModal(".$row['patientid'].")'>Sửa</Button>
-                                    <div class='delete-div'>
-                                        <form method='POST' action='deleteCustomer.php'>
-                                        <input type='hidden' name='patientid' value='" . $row['patientid'] . "'>
-                                        <button class='delete-btn' type='submit'>Xóa</button>
-                                        </form>
-                                    </div>
-                                </td>";
+                                <button class='open-btn' id='openBtn_". $row['patientid'] ."' onclick='toggleButtons(". $row['patientid'] .")'>Open</button>
+                                <div class='btn-div' id='btnDiv_". $row['patientid'] ."' style='display: none;'>
+                                <button class='update-btn'onClick='openUpdatePatientModal(".$row['patientid'].")'>Sửa</Button>
+                                <form method='POST' action='deleteCustomer.php'>
+                                    <input type='hidden' name='patientid' value='". $row['patientid'] ."'>
+                                    <button class='delete-btn' type='submit'>Xóa</button>
+                                </form>
+                                <span class='closeBtnDiv' onclick='toggleButtons(". $row['patientid'] .")'>&times;</span>
+                                </div>
+                            </td>";
                             echo "</tr>";
                             $count++;
                         }
@@ -186,5 +194,45 @@ $conn->close();
 
     <script src="../javascript/modal.js"></script>
     <script src="../javascript/sort.js"></script>
+    <script>
+        function searchTable() {
+        // Get the input value entered by the user
+        var input = document.getElementById('searchInput').value.toLowerCase();
+
+        // Get all the rows of the table
+        var table = document.getElementById('customerTable');
+        var rows = table.getElementsByTagName('tr');
+
+        // Iterate through each row and hide/show based on the input value
+        for (var i = 0; i < rows.length; i++) {
+            var name = rows[i].getElementsByTagName('td')[1]; // Assuming the name is in the first column
+
+            if (name) {
+            var nameText = name.textContent.toLowerCase();
+
+            // Check if the name contains the input value
+            if (nameText.includes(input)) {
+                rows[i].style.display = '';
+            } else {
+                rows[i].style.display = 'none';
+            }
+            }
+        }
+        }
+        function toggleButtons(patientId) {
+            var openBtn = document.getElementById('openBtn_' + patientId);
+            var btnDiv = document.getElementById('btnDiv_' + patientId);
+
+            if (openBtn.style.display === 'none') {
+                setTimeout(function() {
+                    openBtn.style.display = '';
+                    btnDiv.style.display = 'none';
+                }, 10);
+            } else {
+                openBtn.style.display = 'none';
+                btnDiv.style.display = '';
+            }
+        }
+    </script>
 </body>
 </html>

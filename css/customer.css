@@ -159,7 +159,9 @@ h2{
     
   }
   
-  .closeInsert,.closeUpdate {
+  .closeInsert,
+  .closeUpdate, 
+  .closeBtnDiv {
     color: #aaa;
     float: right;
     font-size: 28px;
@@ -174,7 +176,9 @@ h2{
   .closeInsert:hover,
   .closeInsert:focus,
   .closeUpdate:hover,
-  .closeUpdate:focus {
+  .closeUpdate:focus,
+  .closeBtnDiv:hover,
+  .closeBtnDiv:focus  {
     transition: 0.3s;
     color: black;
     text-decoration: none;
@@ -204,7 +208,8 @@ h2{
 
   .button-cell {
     white-space: nowrap;
-    width: 250px;
+    width: 0px;
+    padding: 10px 20px;
   }
   .update-btn,
   .delete-div{
@@ -228,18 +233,69 @@ h2{
   }
   
   .update-btn {
-    background-color: #4CAF50;
+    background-color: #5adbb5;
   }
   
   .delete-btn {
-    background-color: #f44336;
+    background-color: #dd7973;
   }
   .update-btn:hover{
     transition: 0.3s;
-    background-color: #3e8e41;
+    background-color: #33b249;
   }
 
   .delete-btn:hover{
     transition: 0.3s;
     background-color: #d32f2f;;
   }
+
+/* search section */
+.searchDiv {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 20px;
+}
+
+.searchInput {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 20px;
+  margin-right: 5px;
+  width: 500px;
+}
+
+.searchBtn {
+  transition: 0.2s;
+  padding: 10px 15px;
+  background-color: deepskyblue;
+  color: white;
+  border: none;
+  border-radius: 20px;
+  width: 100px;
+  cursor: pointer;
+}
+
+.searchBtn:hover{
+  transition: 0.2s;
+  background-color: cornflowerblue;
+}
+
+/* button div */
+.open-btn{
+  transition: 0.2s;
+  padding: 10px 15px;
+  background-color: #55c2da;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  width: 100px;
+  cursor: pointer;
+}
+.open-btn:hover{
+  transition: 0.2s;
+  background-color: #4681f4;
+}
+.btn-div{
+  display: flex;
+}
