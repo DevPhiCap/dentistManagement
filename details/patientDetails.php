@@ -23,22 +23,6 @@ $stmt->close();
 $query = "SELECT * FROM details WHERE patientId = $patientId";
 $result = $conn->query($query);
 
-// Check if the form is submitted
-// if ($_SERVER["REQUEST_METHOD"] === "POST") {
-//     // Update status and enddate if the "Hoanthien" button is clicked
-//     if(isset($_POST['hoanthien']) && isset($_POST['detailId'])) {
-//         $getDetailId = $_POST['detailId'];
-//         $updateQuery = "UPDATE details SET status = 'da hoan thanh', enddate = CURDATE() WHERE detailsid = ? AND status = 'chua hoan thien'";
-//         $stmt = $conn->prepare($updateQuery);
-//         $stmt->bind_param("i", $getDetailId);
-//         $stmt->execute();
-//         $stmt->close();
-
-//         // Redirect back to the current page
-//         header("Location: patientDetails.php?patientId=" . $patientId);
-//         exit();
-//     }
-// }
 
 // Close the database connection
 $conn->close();
@@ -49,7 +33,7 @@ $conn->close();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ho so benh nhan</title>
-    <link rel="stylesheet" href="customer.css">
+    <link rel="stylesheet" href="../css/customer.css">
 </head>
 <body>
     
@@ -58,16 +42,16 @@ $conn->close();
 
         <?php echo "<h2>Ho so benh nhan " . $patientName . "</h2>"; ?>
         
-        <button id="openModal" class="submit">Them benh an</button>
-
-        <div id="myModal" class="modal">
+        <button id="insertBtn" class="submit">Thêm bệnh án</button>
+        <!-- insert form -->
+        <div id="insertModal" class="modal">
             <div id="modalContent" class="modal-content">
-            <span class="close" onclick="closeModal()">&times;</span>
-                <form id="patientInfo" action="insertDetails.php?patientId=<?php echo $_GET['patientId']; ?>" method="POST" enctype="multipart/form-data">
+                <span class="closeInsert">&times;</span>
+                <form action="insertDetails.php?patientId=<?php echo $_GET['patientId']; ?>" method="POST" enctype="multipart/form-data">
                     <table class="form">
                         <tr>
                             <th colspan="2">
-                                <h3>Them benh an</h3>
+                                <h3>Thêm bệnh án</h3>
                             </th>
                         </tr>
                         <tr>
@@ -91,7 +75,7 @@ $conn->close();
                                 <span>Ngày hoàn thành</span>
                             </td>
                             <td>
-                                <input class="inputform" type="date" name="enddate" required>
+                                <input class="inputform" type="date" name="enddate" >
                             </td>
                         </tr>
                         <tr>
@@ -99,7 +83,7 @@ $conn->close();
                                 <span>Ảnh trước khi điều trị</span>
                             </td>
                             <td>
-                                <input class="inputform" type="file" name="befimg" id="befImgFileInput" onchange="handleImageUpload('befImgFileInput')" required>
+                                <input class="inputform" type="file" name="befimg" id="insertefImgFileInput" onchange="handleImageUpload('insertefImgFileInput')" >
                             </td>
                         </tr>
                         <tr>
@@ -107,7 +91,7 @@ $conn->close();
                                 <span>Ảnh sau khi điều trị</span>
                             </td>
                             <td>
-                                <input class="inputform" type="file" name="aftimg" id="aftImgFileInput" onchange="handleImageUpload('aftImgFileInput')" required>
+                                <input class="inputform" type="file" name="aftimg" id="insertaftImgFileInput" onchange="handleImageUpload('insertaftImgFileInput')" >
                             </td>
                         </tr>
                         <tr>
@@ -121,17 +105,81 @@ $conn->close();
             </div>
         </div>
 
+        <!-- update form -->
+        <div id="updateModal" class="modal">
+            <div id="modalContent" class="modal-content">
+                <span class="closeUpdate">&times;</span>
+                <form id="patientInfo" action="updateDetails.php?patientId=<?php echo $_GET['patientId']; ?>" method="POST" enctype="multipart/form-data">
+                    <table class="form">
+                        <tr>
+                            <th colspan="2">
+                                <h3>Sửa bệnh án</h3>
+                            </th>
+                        </tr>
+                        <tr>
+                            <td class="stcol">
+                                <span>Mô tả</span>
+                            </td>
+                            <td>
+                                <input id="motaInput" class="inputform" type="text" name="mota" placeholder="Mo ta chan doan" required>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="stcol">
+                                <span>Ngày bắt đầu</span>
+                            </td>
+                            <td>
+                                <input id="startdateInput" class="inputform" type="date" name="startdate" required>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="stcol">
+                                <span>Ngày hoàn thành</span>
+                            </td>
+                            <td>
+                                <input id="enddateInput" class="inputform" type="date" name="enddate">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="stcol">
+                                <span>Ảnh trước khi điều trị</span>
+                            </td>
+                            <td>
+                                <input class="inputform" type="file" name="befimg" id="updatebefImgFileInput" onchange="handleImageUpload('updatebefImgFileInput')">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="stcol">
+                                <span>Ảnh sau khi điều trị</span>
+                            </td>
+                            <td>
+                                <input class="inputform" type="file" name="aftimg" id="updateaftImgFileInput" onchange="handleImageUpload('updateaftImgFileInput')">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td id="addbutton" class="addBtn">
+                                <input id="detailsidInput" type="hidden" name="detailsid">
+                                <input type="submit" value="Update" class="submit">
+                            </td>
+                        </tr>
+                    </table>
+                </form>
+            </div>
+        </div>
+
+        <!-- data table -->
         <div class="dataTable">
             <table class="data">
                 <thead>
                     <tr class="head">
-                        <th id="nameHeader">Mota</th>
-                        <th id="startdateHeader">Ngay bat dau</th>
-                        <th id="enddateHeader">Ngay hoan thanh</th>
+                        <th>Stt</th>
+                        <th>Mota</th>
+                        <th>Ngay bat dau</th>
+                        <th>Ngay hoan thanh</th>
                         <th>Truoc dieu tri</th>
                         <th>Sau dieu tri</th>
-                        <!-- <th>Trang thai</th> -->
-                        <!-- <th>Action</th> -->
+                        <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -144,16 +192,17 @@ $conn->close();
                         }
                     }
 
+                    $count = 1;
                     // Display the sorted data in the HTML table
                     if (!empty($result)) {
                         foreach ($sortedData as $row) {
-                            echo "<tr>";
+                            echo "<tr class='row-clickable' data-patientid=". $row['detailsid'] .">";
+                            echo "<td>".$count."</td>";
                             echo "<td style='max-width: 160px;word-wrap: break-word;padding:10px;'>" . $row['mota'] . "</td>";
                             echo "<td>" . date('d/m/Y', strtotime($row['startdate'])) . "</td>";
-                            // Check if the enddate is 'chua co' or a valid date
-                            if ($row['enddate'] == 'chua co') {
-                                echo "<td>" . $row['enddate'] . "</td>";
-                            } else {
+                            if($row['enddate'] == null){
+                                echo "<td>".$row['enddate'] . "</td>";
+                            } else{
                                 echo "<td>" . date('d/m/Y', strtotime($row['enddate'])) . "</td>";
                             }
                             
@@ -169,21 +218,19 @@ $conn->close();
                             }
                             echo "</td>";
 
-                            // echo "<td>" . $row['status'] . "</td>";
-                            
-                            // Add the "Hoanthien" button if status is "chua hoan thien"
-                            // if ($row['status'] == "chua hoan thien") {
-                            //     echo "<td>
-                            //             <form method='post'>
-                            //                 <input type='hidden' name='detailId' value='" . $row['detailsid'] . "'>
-                            //                 <button type='submit' name='hoanthien' value='hoanthien' class='submit'>Hoanthien</button>
-                            //             </form>
-                            //         </td>";
-                            // } else {
-                            //     echo "<td></td>";
-                            // }
+                            echo "<td class='button-cell'>
+                                    <button class='update-btn'onClick='openUpdateDetailsModal(".$row['detailsid'].")'>Sửa</Button>
+                                    <div class='delete-div'>
+                                        <form method='POST' action='deleteDetails.php'>
+                                        <input type='hidden' name='patientid' value='" . $row['patientid'] . "'>
+                                        <input type='hidden' name='detailsid' value='" . $row['detailsid'] . "'>
+                                        <button class='delete-btn' type='submit'>Xóa</button>
+                                        </form>
+                                    </div>
+                                </td>";
                             
                             echo "</tr>";
+                            $count++;
                         }
                     } else {
                         echo "<tr><td colspan='6'>No data available</td></tr>";
@@ -196,9 +243,8 @@ $conn->close();
         </div>
     </div>
 
-    <script src="patientDetails.js"></script>
-    <script src="test.js"></script>
-    <script src="script.js"></script>
+    <script src="../javascript/patientDetails.js"></script>
+    <script src="../javascript/modal.js"></script>
     <script>
         function enlargeImage(image) {
             var enlargedImage = document.createElement("div");
