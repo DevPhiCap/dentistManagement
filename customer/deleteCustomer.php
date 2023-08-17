@@ -14,15 +14,29 @@ if ($conn->connect_error) {
 // Debug
 echo "Received patientid: " . $patientid;
 
-// Prepare and bind the update statement
-$stmt = $conn->prepare("DELETE FROM benhnhan WHERE patientid=?");
-$stmt->bind_param("s", $patientid);
+try {
+  // Delete records from the details table first
+  $stmt = $conn->prepare("DELETE FROM details WHERE patientid=?");
+  $stmt->bind_param("s", $patientid);
+  $stmt->execute();
+  $stmt->close();
 
-// Execute the update statement
-$stmt->execute();
+  // Delete the record from the benhnhan table
+  $stmt = $conn->prepare("DELETE FROM benhnhan WHERE patientid=?");
+  $stmt->bind_param("s", $patientid);
+  $stmt->execute();
+  $stmt->close();
 
-// Close the statement
-$stmt->close();
+  // Commit the transaction
+  $conn->commit();
+
+  echo "Record deleted successfully.";
+} catch (Exception $e) {
+  // Rollback the transaction if an error occurred
+  $conn->rollback();
+
+  echo "Failed to delete the record: " . $e->getMessage();
+}
 
 // Close the connection
 $conn->close();

@@ -184,6 +184,14 @@ h2{
     text-decoration: none;
     cursor: pointer;
   }
+  .closeInsert:active,
+  .closeUpdate:active,
+  .closeBtnDiv:active {
+    transition: 0.3s;
+    color: #aaa;
+    text-decoration: none;
+    cursor: pointer;
+  }
   
   .container.normal-bg {
     background-color: rgba(0, 0, 0, 0.2);
@@ -244,10 +252,18 @@ h2{
     transition: 0.3s;
     background-color: #33b249;
   }
+  .update-btn:active{
+    transition: 0.3s;
+    background-color: #5adbb5;
+  }
 
   .delete-btn:hover{
     transition: 0.3s;
     background-color: #d32f2f;;
+  }
+  .delete-btn:hover{
+    transition: 0.3s;
+    background-color: #dd7973;;
   }
 
 /* search section */
@@ -296,6 +312,10 @@ h2{
 .open-btn:hover{
   transition: 0.2s;
   background-color: #4681f4;
+}
+.open-btn:active{
+  transition: 0.2s;
+  background-color: #55c2da;
 }
 .btn-div{
   display: flex;
