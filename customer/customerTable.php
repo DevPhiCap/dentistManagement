@@ -30,7 +30,6 @@ $conn->close();
         <!-- search -->
         <div class="searchDiv">
             <input type="text" id="searchInput" class="searchInput" onkeyup="searchTable()" placeholder="Tìm bằng tên..." />
-            <!-- <button id="searchBtn" class="searchBtn" onClick="searchTable()">Tìm</button> -->
         </div>
         
         <!-- insert form -->
