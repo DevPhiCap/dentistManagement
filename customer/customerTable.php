@@ -48,7 +48,7 @@ if ($conn->connect_error) {
                 }
                 ?>
             </select>
-            <button onCLick="updateURL()">Tim</button>
+            <button class="open-btn" onCLick="updateURL()">Tim</button>
         </div>
         
         <!-- insert form -->
