@@ -279,24 +279,19 @@ h2{
   border: 1px solid #ccc;
   border-radius: 20px;
   margin-right: 5px;
-  width: 500px;
+  width: 300px;
 }
 
-.searchBtn {
-  transition: 0.2s;
-  padding: 10px 15px;
-  background-color: deepskyblue;
-  color: white;
-  border: none;
+.selectInput {
+  padding: 10px;
+  border: 1px solid #ccc;
   border-radius: 20px;
-  width: 100px;
-  cursor: pointer;
+  margin-right: 5px;
+  width: 200px;
+  transition: opacity 0.3s ease-in-out;
 }
 
-.searchBtn:hover{
-  transition: 0.2s;
-  background-color: cornflowerblue;
-}
+
 
 /* button div */
 .open-btn{
@@ -320,3 +315,4 @@ h2{
 .btn-div{
   display: flex;
 }
+

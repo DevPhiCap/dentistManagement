@@ -10,3 +10,4 @@ function toggleButtons(patientId) {
         btnDiv.style.display = '';
     }
 }
+

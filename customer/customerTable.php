@@ -6,13 +6,6 @@ $conn = new mysqli("localhost", "root", "", "customer");
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
-
-// Fetch data from the database
-$query = "SELECT * FROM benhnhan";
-$result = $conn->query($query);
-
-// Close the database connection
-$conn->close();
 ?>
 
 <!DOCTYPE html>
@@ -30,6 +23,32 @@ $conn->close();
         <!-- search -->
         <div class="searchDiv">
             <input type="text" id="searchInput" class="searchInput" onkeyup="searchTable()" placeholder="Tìm bằng tên..." />
+
+            <select id="startyearSelect" class="selectInput">
+                <?php
+                echo "<option value='' selected disabled>Chọn năm bắt đầu</option>";
+                echo "<option value='' unselected>none</option>";
+                //getcurrent year
+                $currentYear = date("Y");
+                //generate start year
+                for ($year = $currentYear; $year >= 1970; $year--) {
+                    $selected = ($selectedYear == $year) ? 'selected' : 'unselected';
+                    echo "<option value='$year' $selected>$year</option>";
+                }
+                ?>
+            </select>
+            <select id="endyearSelect" class="selectInput">
+                <?php 
+                echo "<option value='' selected disabled>Chọn năm hoàn thành</option>";
+                echo "<option value='' unselected>none</option>";
+                // generate end year
+                for ($year = $currentYear; $year >= 1970; $year--) {
+                    $selected = ($selectedYear == $year) ? 'selected' : 'unselected';
+                    echo "<option value='$year' $selected>$year</option>";
+                }
+                ?>
+            </select>
+            <button onCLick="updateURL()">Tim</button>
         </div>
         
         <!-- insert form -->
@@ -156,6 +175,45 @@ $conn->close();
                 </thead>
                 <tbody>
                     <?php
+                    $selectedStartYear = isset($_GET['startyear']) ? $_GET['startyear'] : '';
+                    $selectedEndYear = isset($_GET['endyear']) ? $_GET['endyear'] : '';
+                    // Prepare and execute the query
+                    if (!empty($selectedStartYear) && !empty($selectedEndYear)) {
+                        // Query with both start year and end year condition
+                        $query = "SELECT bn.*
+                                FROM benhnhan bn
+                                JOIN details dt ON bn.patientid = dt.patientid
+                                WHERE YEAR(dt.startdate) = ? AND YEAR(dt.enddate) = ?";
+                        $stmt = $conn->prepare($query);
+                        $stmt->bind_param("ii", $selectedStartYear, $selectedEndYear);
+                        $stmt->execute();
+                    } else if (!empty($selectedStartYear)) {
+                        // Query with start year condition
+                        $query = "SELECT bn.*
+                                FROM benhnhan bn
+                                JOIN details dt ON bn.patientid = dt.patientid
+                                WHERE YEAR(dt.startdate) = ?";
+                        $stmt = $conn->prepare($query);
+                        $stmt->bind_param("i", $selectedStartYear);
+                        $stmt->execute();
+                    } else if (!empty($selectedEndYear)) {
+                        // Query with end year condition
+                        $query = "SELECT bn.*
+                                FROM benhnhan bn
+                                JOIN details dt ON bn.patientid = dt.patientid
+                                WHERE YEAR(dt.enddate) = ?";
+                        $stmt = $conn->prepare($query);
+                        $stmt->bind_param("i", $selectedEndYear);
+                        $stmt->execute();
+                    } else {
+                        // Query without year condition
+                        $query = "SELECT * FROM benhnhan";
+                        $result = $conn->query($query);
+                    }
+
+                    // Retrieve the results
+                    $result = isset($stmt) ? $stmt->get_result() : $result;
+
                     $count = 1;
                     // Display the sorted data in the HTML table
                     if (!empty($result)) {
@@ -180,6 +238,10 @@ $conn->close();
                             echo "</tr>";
                             $count++;
                         }
+                        if (isset($stmt)) {
+                            $stmt->close();
+                        }
+                        $result->free();
                     } else {
                         echo "<tr><td colspan='4'>No data available</td></tr>";
                     }
@@ -195,5 +257,35 @@ $conn->close();
     <script src="../javascript/sort.js"></script>
     <script src="../javascript/search.js"></script>
     <script src="../javascript/buttonDiv.js"></script>
+    <script>
+        function updateURL() {
+            var startyearSelect = document.getElementById("startyearSelect");
+            var endyearSelect = document.getElementById("endyearSelect");
+            var selectedStartYear = startyearSelect.options[startyearSelect.selectedIndex].value;
+            var selectedEndYear = endyearSelect.options[endyearSelect.selectedIndex].value;
+
+            // Store the selected values in variables
+            var newStartYearValue = selectedStartYear ? selectedStartYear : '';
+            var newEndYearValue = selectedEndYear ? selectedEndYear : '';
+
+            // Update the URL with the selected years
+            if (newStartYearValue || newEndYearValue) {
+                var currentURL = new URL(window.location.href);
+                currentURL.searchParams.set('startyear', newStartYearValue);
+                currentURL.searchParams.set('endyear', newEndYearValue);
+                window.history.pushState({}, '', currentURL);
+            } else {
+                var currentURL = new URL(window.location.href);
+                currentURL.searchParams.set('startyear', '');
+                currentURL.searchParams.set('endyear', '');
+                window.history.pushState({}, '', currentURL);
+            }
+
+            window.location.reload();
+        }
+    </script>
+    <?php
+        $conn->close();
+    ?>
 </body>
 </html>

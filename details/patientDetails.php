@@ -205,8 +205,8 @@ $conn->close();
                             echo "<td>".$count."</td>";
                             echo "<td style='max-width: 160px;word-wrap: break-word;padding:10px;'>" . $row['mota'] . "</td>";
                             echo "<td>" . date('d/m/Y', strtotime($row['startdate'])) . "</td>";
-                            if($row['enddate'] == null){
-                                echo "<td>".$row['enddate'] . "</td>";
+                            if($row['enddate'] == '0000-00-00'){
+                                echo "<td>"."</td>";
                             } else{
                                 echo "<td>" . date('d/m/Y', strtotime($row['enddate'])) . "</td>";
                             }
