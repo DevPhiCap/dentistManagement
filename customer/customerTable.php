@@ -22,7 +22,10 @@ if ($conn->connect_error) {
         <button id="insertBtn" class="submit">Thêm khách hàng</button>
         <!-- search -->
         <div class="searchDiv">
-            <input type="text" id="searchInput" class="searchInput" onkeyup="searchTable()" placeholder="Tìm bằng tên..." />
+            <input type="text" id="searchInputName" class="searchInput" onkeyup="namesearchTable()" placeholder="Tìm bằng tên..." />
+            <input type="text" id="searchInputAge" class="searchInput" onkeyup="agesearchTable()" placeholder="Tìm bằng tuổi.." />
+            <input type="text" id="searchInputPhone" class="searchInput" onkeyup="phonesearchTable()" placeholder="Tìm bằng số điện thoại..." />
+            <input type="text" id="searchInputAddress" class="searchInput" onkeyup="addresssearchTable()" placeholder="Tìm bằng địa chỉ..." />
         </div>
         <button id="yearBtn" class="open-btn" style="width:fit-content;" onClick="yearsearchButton()">Tìm theo năm</button>
         <button id="monthBtn" class="open-btn" style="width:fit-content;" onClick="monthsearchButton()">Tìm theo tháng</button>
@@ -310,6 +313,9 @@ if ($conn->connect_error) {
             var endyearSelect = document.getElementById("endyearSelect");
             var selectedStartYear = startyearSelect.options[startyearSelect.selectedIndex].value;
             var selectedEndYear = endyearSelect.options[endyearSelect.selectedIndex].value;
+            var currentURL = new URL(window.location.href);
+            currentURL.searchParams.set('startyearmonth', '');
+            currentURL.searchParams.set('endyearmonth', '');
 
             // Store the selected values in variables
             var newStartYearValue = selectedStartYear ? selectedStartYear : '';
@@ -317,12 +323,10 @@ if ($conn->connect_error) {
 
             // Update the URL with the selected years
             if (newStartYearValue || newEndYearValue) {
-                var currentURL = new URL(window.location.href);
                 currentURL.searchParams.set('startyear', newStartYearValue);
                 currentURL.searchParams.set('endyear', newEndYearValue);
                 window.history.pushState({}, '', currentURL);
             } else {
-                var currentURL = new URL(window.location.href);
                 currentURL.searchParams.set('startyear', '');
                 currentURL.searchParams.set('endyear', '');
                 window.history.pushState({}, '', currentURL);
@@ -336,9 +340,10 @@ if ($conn->connect_error) {
             var endyearmonthSelect = document.getElementById("endyearmonthSelect");
             var selectedStartYearMonth = startyearmonthSelect.value;
             var selectedEndYearMonth = endyearmonthSelect.value;
-
-            // Update the URL with the selected year and month
             var currentURL = new URL(window.location.href);
+
+            currentURL.searchParams.set('startyear', '');
+            currentURL.searchParams.set('endyear', '');
             currentURL.searchParams.set('startyearmonth', selectedStartYearMonth);
             currentURL.searchParams.set('endyearmonth', selectedEndYearMonth);
             window.history.pushState({}, '', currentURL);
