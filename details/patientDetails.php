@@ -19,13 +19,6 @@ $stmt->bind_result($patientName);
 $stmt->fetch();
 $stmt->close();
 
-// Fetch data from the details table
-$query = "SELECT * FROM details WHERE patientId = $patientId";
-$result = $conn->query($query);
-
-
-// Close the database connection
-$conn->close();
 ?>
 
 <html lang="en">
@@ -180,8 +173,8 @@ $conn->close();
                     <tr class="head">
                         <th>Stt</th>
                         <th>Mô tả</th>
-                        <th>Ngày bắt đầu</th>
-                        <th>Ngày hoàn thành</th>
+                        <th onClick="sortbyStart()">Ngày bắt đầu</th>
+                        <th onClick="sortbyEnd()">Ngày hoàn thành</th>
                         <th>Trước điều trị</th>
                         <th>Sau điều trị</th>
                         <th>Chức năng</th>
@@ -189,6 +182,27 @@ $conn->close();
                 </thead>
                 <tbody>
                 <?php
+                
+                $selectedStart = isset($_GET['startdate']) ? $_GET['startdate'] : '';
+                $selectedEnd = isset($_GET['enddate']) ? $_GET['enddate'] : '';
+                if($selectedStart == 'asc'){
+                    $query = "SELECT * FROM details WHERE patientId = $patientId ORDER BY startdate";
+                    $result = $conn->query($query);
+                } else if($selectedStart == 'desc'){
+                    $query = "SELECT * FROM details WHERE patientId = $patientId ORDER BY startdate DESC";
+                    $result = $conn->query($query);
+                } else if($selectedEnd == 'asc'){
+                    $query = "SELECT * FROM details WHERE patientId = $patientId ORDER BY enddate";
+                    $result = $conn->query($query);
+                } else if($selectedEnd == 'desc'){
+                    $query = "SELECT * FROM details WHERE patientId = $patientId ORDER BY enddate DESC";
+                    $result = $conn->query($query);
+                } else {
+                    // Fetch data from the details table
+                    $query = "SELECT * FROM details WHERE patientId = $patientId";
+                    $result = $conn->query($query);
+                }
+
                     // Retrieve and store the sorted data in an array
                     $sortedData = array();
                     if (!empty($result)) {
@@ -263,6 +277,43 @@ $conn->close();
             document.body.removeChild(enlargedImage);
             });
         }
+
+        function sortbyStart() {
+            var currentURL = new URL(window.location.href);
+            var sortingParam = currentURL.searchParams.get('startdate');
+            currentURL.searchParams.set('enddate', '');
+
+            if (sortingParam === 'asc') {
+                currentURL.searchParams.set('startdate', 'desc');
+            } else if (sortingParam === 'desc') {
+                currentURL.searchParams.set('startdate', 'asc');
+            } else {
+                currentURL.searchParams.set('startdate', 'asc');
+            }
+
+            window.location.href = currentURL;
+        }
+
+        
+        function sortbyEnd() {
+            var currentURL = new URL(window.location.href);
+            var sortingParam = currentURL.searchParams.get('enddate');
+            currentURL.searchParams.set('startdate', '');
+
+            if (sortingParam === 'asc') {
+                currentURL.searchParams.set('enddate', 'desc');
+            } else if (sortingParam === 'desc') {
+                currentURL.searchParams.set('enddate', 'asc');
+            } else {
+                currentURL.searchParams.set('enddate', 'asc');
+            }
+
+            window.location.href = currentURL;
+        }
     </script>
+    <?php
+        // Close the database connection
+        $conn->close(); 
+    ?>
 </body>
 </html>
