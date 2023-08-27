@@ -44,5 +44,5 @@ document.addEventListener('DOMContentLoaded', function () {
 
 function redirectToPatientDetails(patientId) {
   // Redirect to patientDetails.php with the patientId parameter
-  window.location.href = '../details/patientDetails.php?patientId=' + patientId;
+  window.location.href = '../details/patientDetails.php?patientId=' + patientId + '&startdate=asc';
 }

@@ -82,6 +82,6 @@ $stmt->close();
 $conn->close();
 
 // Redirect to the patient details page
-header("Location: patientDetails.php?patientId=" . $patientId);
+header("Location: patientDetails.php?patientId=" . $patientId.'&startdate=asc');
 exit();
 ?>

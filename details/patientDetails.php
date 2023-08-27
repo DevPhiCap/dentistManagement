@@ -199,7 +199,7 @@ $stmt->close();
                     $result = $conn->query($query);
                 } else {
                     // Fetch data from the details table
-                    $query = "SELECT * FROM details WHERE patientId = $patientId";
+                    $query = "SELECT * FROM details WHERE patientId = $patientId ORDER BY startdate";
                     $result = $conn->query($query);
                 }
 
@@ -294,7 +294,6 @@ $stmt->close();
             window.location.href = currentURL;
         }
 
-        
         function sortbyEnd() {
             var currentURL = new URL(window.location.href);
             var sortingParam = currentURL.searchParams.get('enddate');

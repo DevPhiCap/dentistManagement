@@ -29,7 +29,7 @@ $stmt->close();
 $conn->close();
 
 // Redirect to the home page or the updated customer details page
-header("Location: patientDetails.php?patientId=" . $patientId);
+header("Location: patientDetails.php?patientId=" . $patientId.'&startdate=asc');
 exit();
 
 ?>
