@@ -83,6 +83,7 @@ function openUpdateDetailsModal(detailsid) {
   }
 }
 
+
 // Function to parse the date from "dd/mm/yyyy" format to "mm/dd/yyyy" format
 function parseDate(dateString) {
   const parts = dateString.split("/");

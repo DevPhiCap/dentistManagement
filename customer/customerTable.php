@@ -23,7 +23,8 @@ if ($conn->connect_error) {
         <!-- search -->
         <div class="searchDiv">
             <input type="text" id="searchInput" class="searchInput" onkeyup="searchTable()" placeholder="Tìm bằng tên..." />
-
+        </div>
+        <div class="searchDiv">
             <select id="startyearSelect" class="selectInput">
                 <?php
                 echo "<option value='' selected disabled>Chọn năm bắt đầu</option>";
@@ -49,6 +50,12 @@ if ($conn->connect_error) {
                 ?>
             </select>
             <button class="open-btn" onCLick="updateURL()">Tim</button>
+
+        </div>
+        <div class="searchDiv">
+            <input type="month" id="startyearmonthSelect" class="monthInput">
+            <input type="month" id="endyearmonthSelect" class="monthInput">
+            <button class="open-btn" onCLick="updatemonthURL()">Tim</button>
         </div>
         
         <!-- insert form -->
@@ -177,9 +184,11 @@ if ($conn->connect_error) {
                     <?php
                     $selectedStartYear = isset($_GET['startyear']) ? $_GET['startyear'] : '';
                     $selectedEndYear = isset($_GET['endyear']) ? $_GET['endyear'] : '';
-                    // Prepare and execute the query
+                    $selectedStartYearMonth = isset($_GET['startyearmonth']) ? $_GET['startyearmonth'] : '';
+                    $selectedEndYearMonth = isset($_GET['endyearmonth']) ? $_GET['endyearmonth'] : '';
+
+                    //select by just year
                     if (!empty($selectedStartYear) && !empty($selectedEndYear)) {
-                        // Query with both start year and end year condition
                         $query = "SELECT bn.*
                                 FROM benhnhan bn
                                 JOIN details dt ON bn.patientid = dt.patientid
@@ -188,7 +197,6 @@ if ($conn->connect_error) {
                         $stmt->bind_param("ii", $selectedStartYear, $selectedEndYear);
                         $stmt->execute();
                     } else if (!empty($selectedStartYear)) {
-                        // Query with start year condition
                         $query = "SELECT bn.*
                                 FROM benhnhan bn
                                 JOIN details dt ON bn.patientid = dt.patientid
@@ -197,7 +205,6 @@ if ($conn->connect_error) {
                         $stmt->bind_param("i", $selectedStartYear);
                         $stmt->execute();
                     } else if (!empty($selectedEndYear)) {
-                        // Query with end year condition
                         $query = "SELECT bn.*
                                 FROM benhnhan bn
                                 JOIN details dt ON bn.patientid = dt.patientid
@@ -205,8 +212,46 @@ if ($conn->connect_error) {
                         $stmt = $conn->prepare($query);
                         $stmt->bind_param("i", $selectedEndYear);
                         $stmt->execute();
-                    } else {
-                        // Query without year condition
+                    } 
+                    //select by month and year
+                    else if (!empty($selectedStartYearMonth) && !empty($selectedEndYearMonth)) {
+                        $query = "SELECT bn.*
+                                FROM benhnhan bn
+                                JOIN details dt ON bn.patientid = dt.patientid
+                                WHERE YEAR(dt.startdate) = ? AND MONTH(dt.startdate) = ?
+                                AND YEAR(dt.enddate) = ? AND MONTH(dt.enddate) = ?;";
+                        $stmt = $conn->prepare($query);
+                        $stmt->bind_param("iiii", $startYear, $startMonth, $endYear, $endMonth);
+                        
+                        list($startYear, $startMonth) = explode('-', $selectedStartYearMonth);
+                        list($endYear, $endMonth) = explode('-', $selectedEndYearMonth);
+
+                        $stmt->execute();
+                    } else if (!empty($selectedStartYearMonth)) {
+                        $query = "SELECT bn.*
+                                FROM benhnhan bn
+                                JOIN details dt ON bn.patientid = dt.patientid
+                                WHERE YEAR(dt.startdate) = ? AND MONTH(dt.startdate) = ?";
+                        $stmt = $conn->prepare($query);
+
+                        $stmt->bind_param("ii", $startYear, $startMonth);
+                        list($startYear, $startMonth) = explode('-', $selectedStartYearMonth);
+
+                        $stmt->execute();
+                    } else if (!empty($selectedEndYearMonth)) {
+                        $query = "SELECT bn.*
+                                FROM benhnhan bn
+                                JOIN details dt ON bn.patientid = dt.patientid
+                                WHERE YEAR(dt.enddate) = ? AND MONTH(dt.enddate) = ?;";
+                        $stmt = $conn->prepare($query);
+
+                        $stmt->bind_param("ii", $endYear, $endMonth);
+                        list($endYear, $endMonth) = explode('-', $selectedEndYearMonth);
+
+                        $stmt->execute();
+                    } 
+                    //select all
+                    else {
                         $query = "SELECT * FROM benhnhan";
                         $result = $conn->query($query);
                     }
@@ -280,6 +325,21 @@ if ($conn->connect_error) {
                 currentURL.searchParams.set('endyear', '');
                 window.history.pushState({}, '', currentURL);
             }
+
+            window.location.reload();
+        }
+
+        function updatemonthURL() {
+            var startyearmonthSelect = document.getElementById("startyearmonthSelect");
+            var endyearmonthSelect = document.getElementById("endyearmonthSelect");
+            var selectedStartYearMonth = startyearmonthSelect.value;
+            var selectedEndYearMonth = endyearmonthSelect.value;
+
+            // Update the URL with the selected year and month
+            var currentURL = new URL(window.location.href);
+            currentURL.searchParams.set('startyearmonth', selectedStartYearMonth);
+            currentURL.searchParams.set('endyearmonth', selectedEndYearMonth);
+            window.history.pushState({}, '', currentURL);
 
             window.location.reload();
         }

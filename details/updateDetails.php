@@ -37,17 +37,45 @@ if ($conn->connect_error) {
 }
 
 // Prepare the update statement
-$sql = "UPDATE details SET mota = ?, startdate = ?, enddate = ?, befimg = ?, aftimg = ? WHERE detailsid = ?";
-$stmt = $conn->prepare($sql);
+if(!empty($befimg) && !empty($aftimg)) {
+    $sql = "UPDATE details SET mota = ?, startdate = ?, enddate = ?, befimg = ?, aftimg = ? WHERE detailsid = ?";
+    $stmt = $conn->prepare($sql);
 
-// Generate image URLs and bind the parameters
-$befimgUrl = handleFileUpload("befimg");
-$aftimgUrl = handleFileUpload("aftimg");
+    // Generate image URLs and bind the parameters
+    $befimgUrl = handleFileUpload("befimg");
+    $aftimgUrl = handleFileUpload("aftimg");
 
+    // Bind the parameters
+    $stmt->bind_param("ssssss", $mota, $startdate, $enddate, $befimgUrl, $aftimgUrl, $detailsid);
+    $stmt->execute();
+} else if(!empty($befimg)){
+    $sql = "UPDATE details SET mota = ?, startdate = ?, enddate = ?, befimg = ? WHERE detailsid = ?";
+    $stmt = $conn->prepare($sql);
 
-// Bind the parameters
-$stmt->bind_param("ssssss", $mota, $startdate, $enddate, $befimgUrl, $aftimgUrl, $detailsid);
-$stmt->execute();
+    // Generate image URLs and bind the parameters
+    $befimgUrl = handleFileUpload("befimg");
+
+    // Bind the parameters
+    $stmt->bind_param("sssss", $mota, $startdate, $enddate, $befimgUrl, $detailsid);
+    $stmt->execute();
+} else if(!empty($aftimg)){
+    $sql = "UPDATE details SET mota = ?, startdate = ?, enddate = ?, aftimg = ? WHERE detailsid = ?";
+    $stmt = $conn->prepare($sql);
+
+    // Generate image URLs and bind the parameters
+    $aftimgUrl = handleFileUpload("aftimg");
+
+    // Bind the parameters
+    $stmt->bind_param("sssss", $mota, $startdate, $enddate, $aftimgUrl, $detailsid);
+    $stmt->execute();
+} else {
+    $sql = "UPDATE details SET mota = ?, startdate = ?, enddate = ? WHERE detailsid = ?";
+    $stmt = $conn->prepare($sql);
+
+    // Bind the parameters
+    $stmt->bind_param("ssss", $mota, $startdate, $enddate, $detailsid);
+    $stmt->execute();
+}
 
 // Close the statement and connection
 $stmt->close();

@@ -38,7 +38,7 @@ $conn->close();
 <body>
     
     <div id="container" class="container">
-        <button onclick="redirectToCustomerTable()" class="submit">Back</button>
+        <button onclick="redirectToCustomerTable()" class="back">Back to Home</button>
 
         <?php echo "<h2>Hồ sơ bệnh nhân " . $patientName . "</h2>"; ?>
         
@@ -203,7 +203,7 @@ $conn->close();
                         foreach ($sortedData as $row) {
                             echo "<tr class='row-clickable' data-patientid=". $row['detailsid'] .">";
                             echo "<td>".$count."</td>";
-                            echo "<td style='max-width: 160px;word-wrap: break-word;padding:10px;'>" . $row['mota'] . "</td>";
+                            echo "<td class='nameCell'>" . $row['mota'] . "</td>";
                             echo "<td>" . date('d/m/Y', strtotime($row['startdate'])) . "</td>";
                             if($row['enddate'] == '0000-00-00'){
                                 echo "<td>"."</td>";
