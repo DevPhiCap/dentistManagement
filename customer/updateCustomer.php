@@ -5,6 +5,7 @@ $name = $_POST['name'];
 $age = $_POST['age'];
 $phone = $_POST['phone'];
 $address = $_POST['address'];
+$schedule = $_POST['schedule'];
 $patientid = $_POST['patientid'];
 
 // Connect to the database
@@ -16,8 +17,8 @@ if ($conn->connect_error) {
 }
 
 // Prepare and bind the update statement
-$stmt = $conn->prepare("UPDATE benhnhan SET name=?, age=?, phoneno=?, address=? WHERE patientid=?");
-$stmt->bind_param("sssss", $name, $age, $phone, $address, $patientid);
+$stmt = $conn->prepare("UPDATE benhnhan SET name=?, age=?, phoneno=?, address=?, schedule=? WHERE patientid=?");
+$stmt->bind_param("ssssss", $name, $age, $phone, $address, $schedule, $patientid);
 
 // Execute the update statement
 $stmt->execute();

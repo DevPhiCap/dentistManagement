@@ -14,12 +14,12 @@ function toggleButtons(patientId) {
 function yearsearchButton(){
     var yearsearchDiv = document.getElementById('yearselect');
     var monthsearchDiv = document.getElementById('monthselect');
+    var schesearchDiv = document.getElementById('scheselect');
 
         if(yearsearchDiv.style.display === 'none'){
             yearsearchDiv.style.display = 'block';
-            if(monthsearchDiv.style.display === 'block'){
-                monthsearchDiv.style.display = 'none';
-            }
+            monthsearchDiv.style.display = 'none';
+            schesearchDiv.style.display = 'none';
         } else {
             yearsearchDiv.style.display = 'none';
         }
@@ -28,14 +28,28 @@ function yearsearchButton(){
 function monthsearchButton(){
     var yearsearchDiv = document.getElementById('yearselect');
     var monthsearchDiv = document.getElementById('monthselect');
+    var schesearchDiv = document.getElementById('scheselect');
 
     if(monthsearchDiv.style.display === 'none'){
         monthsearchDiv.style.display = 'block';
-        if(yearsearchDiv.style.display === 'block'){
-            yearsearchDiv.style.display = 'none';
-        }
+        yearsearchDiv.style.display = 'none';
+        schesearchDiv.style.display = 'none';
     } else {
         monthsearchDiv.style.display = 'none';
+    }
+}
+
+function schesearchButton(){
+    var yearsearchDiv = document.getElementById('yearselect');
+    var monthsearchDiv = document.getElementById('monthselect');
+    var schesearchDiv = document.getElementById('scheselect');
+
+    if(schesearchDiv.style.display === 'none'){
+        schesearchDiv.style.display = 'block';
+        yearsearchDiv.style.display = 'none';
+        monthsearchDiv.style.display = 'none';
+    } else {
+        schesearchDiv.style.display = 'none';
     }
 }
 

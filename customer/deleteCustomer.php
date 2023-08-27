@@ -21,12 +21,6 @@ try {
   $stmt->execute();
   $stmt->close();
 
-  // Delete the record from the benhnhan table
-  $stmt = $conn->prepare("DELETE FROM benhnhan WHERE patientid=?");
-  $stmt->bind_param("s", $patientid);
-  $stmt->execute();
-  $stmt->close();
-
   // Commit the transaction
   $conn->commit();
 

@@ -5,6 +5,7 @@ $name = $_POST['name'];
 $age = $_POST['age'];
 $phone = $_POST['phone'];
 $address = $_POST['address'];
+$schedule = $_POST['schedule'];
 
 // Connect to the database
 $conn = new mysqli("localhost", "root", "", "customer");
@@ -15,8 +16,8 @@ if ($conn->connect_error) {
 }
 
 // Prepare and bind the insert statement
-$stmt = $conn->prepare("INSERT INTO benhnhan (name, age, phoneno, address) VALUES (?, ?, ?, ?)");
-$stmt->bind_param("ssss", $name, $age, $phone, $address);
+$stmt = $conn->prepare("INSERT INTO benhnhan (name, age, phoneno, address,schedule) VALUES (?, ?, ?, ?)");
+$stmt->bind_param("sssss", $name, $age, $phone, $address, $schedule);
 
 // Execute the insert statement
 $stmt->execute();

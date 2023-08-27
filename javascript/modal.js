@@ -41,6 +41,7 @@ function openUpdatePatientModal(patientId) {
   var ageInput = document.getElementById("ageInput");
   var phoneInput = document.getElementById("phoneInput");
   var addressInput = document.getElementById("addressInput");
+  var scheduleInput = document.getElementById("scheduleInput");
 
   // Set the form values based on the selected row's data
   var row = document.querySelector(".row-clickable[data-patientid='" + patientId + "']");
@@ -52,6 +53,7 @@ function openUpdatePatientModal(patientId) {
     ageInput.value = cells[2].textContent;
     phoneInput.value = cells[3].textContent;
     addressInput.value = cells[4].textContent;
+    scheduleInput.value = parseDate(cells[5].textContent);
     // Open the modal
     openModal(updateModal); // Use the updated variable
   } else {

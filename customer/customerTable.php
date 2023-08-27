@@ -19,16 +19,18 @@ if ($conn->connect_error) {
 <body>
     <div id="container" class="container">
         <h2>Quản lý khách hàng</h2>
+        <button onClick="redirectToCustomerTable()" class="update-btn" style="width:fit-content;">Về bảng mặc định</button>
         <button id="insertBtn" class="submit">Thêm khách hàng</button>
         <!-- search -->
         <div class="searchDiv">
-            <input type="text" id="searchInputName" class="searchInput" onkeyup="namesearchTable()" placeholder="Tìm bằng tên..." />
-            <input type="text" id="searchInputAge" class="searchInput" onkeyup="agesearchTable()" placeholder="Tìm bằng tuổi.." />
-            <input type="text" id="searchInputPhone" class="searchInput" onkeyup="phonesearchTable()" placeholder="Tìm bằng số điện thoại..." />
-            <input type="text" id="searchInputAddress" class="searchInput" onkeyup="addresssearchTable()" placeholder="Tìm bằng địa chỉ..." />
+            <input type="text" id="searchInputName" class="searchInput" onkeyup="searchTable()" placeholder="Tìm bằng tên..." />
+            <input type="text" id="searchInputAge" class="searchInput" onkeyup="searchTable()" placeholder="Tìm bằng tuổi.." />
+            <input type="text" id="searchInputPhone" class="searchInput" onkeyup="searchTable()" placeholder="Tìm bằng số điện thoại..." />
+            <input type="text" id="searchInputAddress" class="searchInput" onkeyup="searchTable()" placeholder="Tìm bằng địa chỉ..." />
         </div>
-        <button id="yearBtn" class="open-btn" style="width:fit-content;" onClick="yearsearchButton()">Tìm theo năm</button>
-        <button id="monthBtn" class="open-btn" style="width:fit-content;" onClick="monthsearchButton()">Tìm theo tháng</button>
+        <button id="yearBtn" class="open-btn" style="width:fit-content;" onClick="yearsearchButton()">Tìm theo năm bệnh án</button>
+        <button id="monthBtn" class="open-btn" style="width:fit-content;" onClick="monthsearchButton()">Tìm theo tháng bệnh án</button>
+        <button id="scheBtn" class="open-btn" style="width:fit-content;" onClick="schesearchButton()">Tìm theo lịch đến khám</button>
         <div id="yearselect" class="searchDiv" style="display:none;">
             <select id="startyearSelect" class="selectInput">
                 <?php
@@ -58,9 +60,13 @@ if ($conn->connect_error) {
 
         </div>
         <div id="monthselect" class="searchDiv" style="display:none;">
-            <input type="month" id="startyearmonthSelect" class="monthInput" placeholder="startDate">
+            <input type="month" id="startyearmonthSelect" class="monthInput">
             <input type="month" id="endyearmonthSelect" class="monthInput">
             <button class="open-btn" onCLick="updatemonthURL()" style="width:fit-content;">Tim theo tháng</button>
+        </div>
+        <div id="scheselect" class="searchDiv" style="display:none;">
+            <input type="date" id="schedateSelect" class="monthInput">
+            <button class="open-btn" onCLick="updatescheURL()" style="width:fit-content;">Tim theo lịch khám</button>
         </div>
 
         <!-- insert form -->
@@ -105,6 +111,14 @@ if ($conn->connect_error) {
                         <td>
                             <input class="inputform" type="text" name="address" placeholder="Address" required>
                         </td>
+                    </tr>
+                    <tr>
+                    <td class="stcol">
+                        <span>Ngày đến khám</span>
+                    </td>
+                    <td>
+                        <input class="inputform" type="date" name="schedule" placeholder="Schedule" >
+                    </td>
                     </tr>
                     <tr>
                         <td></td>
@@ -161,6 +175,14 @@ if ($conn->connect_error) {
                     </td>
                     </tr>
                     <tr>
+                    <td class="stcol">
+                        <span>Ngày đến khám</span>
+                    </td>
+                    <td>
+                        <input id="scheduleInput" class="inputform" type="date" name="schedule" placeholder="Schedule" >
+                    </td>
+                    </tr>
+                    <tr>
                     <td></td>
                     <td class="addBtn">
                         <input id="patientidInput" type="hidden" name="patientid">
@@ -182,6 +204,7 @@ if ($conn->connect_error) {
                         <th>Tuổi</th>
                         <th>Số điện thoại</th>
                         <th>Địa chỉ</th>
+                        <th>Lịch đến khám</th>
                         <th>Chức năng</th>
                     </tr>
                 </thead>
@@ -191,6 +214,7 @@ if ($conn->connect_error) {
                     $selectedEndYear = isset($_GET['endyear']) ? $_GET['endyear'] : '';
                     $selectedStartYearMonth = isset($_GET['startyearmonth']) ? $_GET['startyearmonth'] : '';
                     $selectedEndYearMonth = isset($_GET['endyearmonth']) ? $_GET['endyearmonth'] : '';
+                    $selectedSchedule = isset($_GET['schedule']) ? $_GET['schedule'] : '';
 
                     //select by just year
                     if (!empty($selectedStartYear) && !empty($selectedEndYear)) {
@@ -255,6 +279,16 @@ if ($conn->connect_error) {
 
                         $stmt->execute();
                     } 
+                    //select scheduled
+                    else if(!empty($selectedSchedule)){
+                        $query = "SELECT * FROM benhnhan
+                                WHERE schedule = ?";
+                        $stmt = $conn->prepare($query);
+
+                        $stmt->bind_param("s", $selectedSchedule);
+
+                        $stmt->execute();
+                    }
                     //select all
                     else {
                         $query = "SELECT * FROM benhnhan";
@@ -274,6 +308,11 @@ if ($conn->connect_error) {
                             echo "<td>" . $row['age'] . "</td>";
                             echo "<td>" . $row['phoneno'] . "</td>";
                             echo "<td>" . $row['address'] . "</td>";
+                            if($row['schedule'] == '0000-00-00'){
+                                echo "<td>"."</td>";
+                            } else{
+                                echo "<td>" . date('d/m/Y', strtotime($row['schedule'])) . "</td>";
+                            }
                             echo "<td class='button-cell'>
                                 <button class='open-btn' id='openBtn_". $row['patientid'] ."' onclick='toggleButtons(". $row['patientid'] .")'>Open</button>
                                 <div class='btn-div' id='btnDiv_". $row['patientid'] ."' style='display: none;'>
@@ -307,50 +346,8 @@ if ($conn->connect_error) {
     <script src="../javascript/sort.js"></script>
     <script src="../javascript/search.js"></script>
     <script src="../javascript/buttonDiv.js"></script>
-    <script>
-        function updateURL() {
-            var startyearSelect = document.getElementById("startyearSelect");
-            var endyearSelect = document.getElementById("endyearSelect");
-            var selectedStartYear = startyearSelect.options[startyearSelect.selectedIndex].value;
-            var selectedEndYear = endyearSelect.options[endyearSelect.selectedIndex].value;
-            var currentURL = new URL(window.location.href);
-            currentURL.searchParams.set('startyearmonth', '');
-            currentURL.searchParams.set('endyearmonth', '');
-
-            // Store the selected values in variables
-            var newStartYearValue = selectedStartYear ? selectedStartYear : '';
-            var newEndYearValue = selectedEndYear ? selectedEndYear : '';
-
-            // Update the URL with the selected years
-            if (newStartYearValue || newEndYearValue) {
-                currentURL.searchParams.set('startyear', newStartYearValue);
-                currentURL.searchParams.set('endyear', newEndYearValue);
-                window.history.pushState({}, '', currentURL);
-            } else {
-                currentURL.searchParams.set('startyear', '');
-                currentURL.searchParams.set('endyear', '');
-                window.history.pushState({}, '', currentURL);
-            }
-
-            window.location.reload();
-        }
-
-        function updatemonthURL() {
-            var startyearmonthSelect = document.getElementById("startyearmonthSelect");
-            var endyearmonthSelect = document.getElementById("endyearmonthSelect");
-            var selectedStartYearMonth = startyearmonthSelect.value;
-            var selectedEndYearMonth = endyearmonthSelect.value;
-            var currentURL = new URL(window.location.href);
-
-            currentURL.searchParams.set('startyear', '');
-            currentURL.searchParams.set('endyear', '');
-            currentURL.searchParams.set('startyearmonth', selectedStartYearMonth);
-            currentURL.searchParams.set('endyearmonth', selectedEndYearMonth);
-            window.history.pushState({}, '', currentURL);
-
-            window.location.reload();
-        }
-    </script>
+    <script src="../javascript/updateURL.js"></script>
+    <script src="../javascript/patientDetails.js"></script>
     <?php
         $conn->close();
     ?>
