@@ -24,7 +24,9 @@ if ($conn->connect_error) {
         <div class="searchDiv">
             <input type="text" id="searchInput" class="searchInput" onkeyup="searchTable()" placeholder="Tìm bằng tên..." />
         </div>
-        <div class="searchDiv">
+        <button id="yearBtn" class="open-btn" style="width:fit-content;" onClick="yearsearchButton()">Tìm theo năm</button>
+        <button id="monthBtn" class="open-btn" style="width:fit-content;" onClick="monthsearchButton()">Tìm theo tháng</button>
+        <div id="yearselect" class="searchDiv" style="display:none;">
             <select id="startyearSelect" class="selectInput">
                 <?php
                 echo "<option value='' selected disabled>Chọn năm bắt đầu</option>";
@@ -49,15 +51,15 @@ if ($conn->connect_error) {
                 }
                 ?>
             </select>
-            <button class="open-btn" onCLick="updateURL()">Tim</button>
+            <button class="open-btn" onCLick="updateURL()" style="width:fit-content;">Tim theo năm</button>
 
         </div>
-        <div class="searchDiv">
-            <input type="month" id="startyearmonthSelect" class="monthInput">
+        <div id="monthselect" class="searchDiv" style="display:none;">
+            <input type="month" id="startyearmonthSelect" class="monthInput" placeholder="startDate">
             <input type="month" id="endyearmonthSelect" class="monthInput">
-            <button class="open-btn" onCLick="updatemonthURL()">Tim</button>
+            <button class="open-btn" onCLick="updatemonthURL()" style="width:fit-content;">Tim theo tháng</button>
         </div>
-        
+
         <!-- insert form -->
         <div id="insertModal" class="modal">
             <div id="modalContent" class="modal-content">
