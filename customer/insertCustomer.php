@@ -16,7 +16,7 @@ if ($conn->connect_error) {
 }
 
 // Prepare and bind the insert statement
-$stmt = $conn->prepare("INSERT INTO benhnhan (name, age, phoneno, address,schedule) VALUES (?, ?, ?, ?)");
+$stmt = $conn->prepare("INSERT INTO benhnhan (name, age, phoneno, address,schedule) VALUES (?, ?, ?, ?, ?)");
 $stmt->bind_param("sssss", $name, $age, $phone, $address, $schedule);
 
 // Execute the insert statement
