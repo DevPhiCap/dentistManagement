@@ -204,7 +204,7 @@ if ($conn->connect_error) {
                         <th>Tuổi</th>
                         <th>Số điện thoại</th>
                         <th>Địa chỉ</th>
-                        <th>Lịch đến khám</th>
+                        <th onClick="sortbySche()">Lịch đến khám</th>
                         <th>Chức năng</th>
                     </tr>
                 </thead>
@@ -215,13 +215,15 @@ if ($conn->connect_error) {
                     $selectedStartYearMonth = isset($_GET['startyearmonth']) ? $_GET['startyearmonth'] : '';
                     $selectedEndYearMonth = isset($_GET['endyearmonth']) ? $_GET['endyearmonth'] : '';
                     $selectedSchedule = isset($_GET['schedule']) ? $_GET['schedule'] : '';
+                    $selectedSche = isset($_GET['schedate']) ? $_GET['schedate'] : '';
 
-                    //select by just year
+                    // Select by just year
                     if (!empty($selectedStartYear) && !empty($selectedEndYear)) {
                         $query = "SELECT bn.*
                                 FROM benhnhan bn
                                 JOIN details dt ON bn.patientid = dt.patientid
-                                WHERE YEAR(dt.startdate) = ? AND YEAR(dt.enddate) = ?";
+                                WHERE YEAR(dt.startdate) = ? AND YEAR(dt.enddate) = ? 
+                                ORDER BY bn.schedule " . ($selectedSche == 'desc' ? 'DESC' : 'ASC');
                         $stmt = $conn->prepare($query);
                         $stmt->bind_param("ii", $selectedStartYear, $selectedEndYear);
                         $stmt->execute();
@@ -229,7 +231,8 @@ if ($conn->connect_error) {
                         $query = "SELECT bn.*
                                 FROM benhnhan bn
                                 JOIN details dt ON bn.patientid = dt.patientid
-                                WHERE YEAR(dt.startdate) = ?";
+                                WHERE YEAR(dt.startdate) = ? 
+                                ORDER BY bn.schedule " . ($selectedSche == 'desc' ? 'DESC' : 'ASC');
                         $stmt = $conn->prepare($query);
                         $stmt->bind_param("i", $selectedStartYear);
                         $stmt->execute();
@@ -237,61 +240,70 @@ if ($conn->connect_error) {
                         $query = "SELECT bn.*
                                 FROM benhnhan bn
                                 JOIN details dt ON bn.patientid = dt.patientid
-                                WHERE YEAR(dt.enddate) = ?";
+                                WHERE YEAR(dt.enddate) = ? 
+                                ORDER BY bn.schedule " . ($selectedSche == 'desc' ? 'DESC' : 'ASC');
                         $stmt = $conn->prepare($query);
                         $stmt->bind_param("i", $selectedEndYear);
                         $stmt->execute();
                     } 
-                    //select by month and year
+                    // Select by month and year
                     else if (!empty($selectedStartYearMonth) && !empty($selectedEndYearMonth)) {
                         $query = "SELECT bn.*
                                 FROM benhnhan bn
                                 JOIN details dt ON bn.patientid = dt.patientid
                                 WHERE YEAR(dt.startdate) = ? AND MONTH(dt.startdate) = ?
-                                AND YEAR(dt.enddate) = ? AND MONTH(dt.enddate) = ?;";
+                                AND YEAR(dt.enddate) = ? AND MONTH(dt.enddate) = ?
+                                ORDER BY bn.schedule " . ($selectedSche == 'desc' ? 'DESC' : 'ASC');
                         $stmt = $conn->prepare($query);
-                        $stmt->bind_param("iiii", $startYear, $startMonth, $endYear, $endMonth);
                         
                         list($startYear, $startMonth) = explode('-', $selectedStartYearMonth);
                         list($endYear, $endMonth) = explode('-', $selectedEndYearMonth);
+
+                        $stmt->bind_param("iiii", $startYear, $startMonth, $endYear, $endMonth);
 
                         $stmt->execute();
                     } else if (!empty($selectedStartYearMonth)) {
                         $query = "SELECT bn.*
                                 FROM benhnhan bn
                                 JOIN details dt ON bn.patientid = dt.patientid
-                                WHERE YEAR(dt.startdate) = ? AND MONTH(dt.startdate) = ?";
+                                WHERE YEAR(dt.startdate) = ? AND MONTH(dt.startdate) = ?
+                                ORDER BY bn.schedule " . ($selectedSche == 'desc' ? 'DESC' : 'ASC');
                         $stmt = $conn->prepare($query);
 
-                        $stmt->bind_param("ii", $startYear, $startMonth);
                         list($startYear, $startMonth) = explode('-', $selectedStartYearMonth);
+
+                        $stmt->bind_param("ii", $startYear, $startMonth);
 
                         $stmt->execute();
                     } else if (!empty($selectedEndYearMonth)) {
                         $query = "SELECT bn.*
                                 FROM benhnhan bn
                                 JOIN details dt ON bn.patientid = dt.patientid
-                                WHERE YEAR(dt.enddate) = ? AND MONTH(dt.enddate) = ?;";
+                                WHERE YEAR(dt.enddate) = ? AND MONTH(dt.enddate) = ?
+                                ORDER BY bn.schedule " . ($selectedSche == 'desc' ? 'DESC' : 'ASC');
                         $stmt = $conn->prepare($query);
 
-                        $stmt->bind_param("ii", $endYear, $endMonth);
                         list($endYear, $endMonth) = explode('-', $selectedEndYearMonth);
+
+                        $stmt->bind_param("ii", $endYear, $endMonth);
 
                         $stmt->execute();
                     } 
-                    //select scheduled
-                    else if(!empty($selectedSchedule)){
+                    // Select scheduled
+                    else if (!empty($selectedSchedule)){
                         $query = "SELECT * FROM benhnhan
-                                WHERE schedule = ?";
+                                WHERE schedule = ?
+                                ORDER BY schedule " . ($selectedSche == 'desc' ? 'DESC' : 'ASC');
                         $stmt = $conn->prepare($query);
 
                         $stmt->bind_param("s", $selectedSchedule);
 
                         $stmt->execute();
                     }
-                    //select all
+                    // Select all
                     else {
-                        $query = "SELECT * FROM benhnhan";
+                        $query = "SELECT * FROM benhnhan
+                            ORDER BY schedule " . ($selectedSche == 'desc' ? 'DESC' : 'ASC');
                         $result = $conn->query($query);
                     }
 

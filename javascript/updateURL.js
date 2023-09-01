@@ -51,3 +51,18 @@ function updatescheURL() {
 
     window.location.reload();
 }
+function sortbySche() {
+    var currentURL = new URL(window.location.href);
+    var sortingParam = currentURL.searchParams.get('schedate');
+    currentURL.searchParams.set('schedate', '');
+
+    if (sortingParam === 'asc') {
+        currentURL.searchParams.set('schedate', 'desc');
+    } else if (sortingParam === 'desc') {
+        currentURL.searchParams.set('schedate', 'asc');
+    } else {
+        currentURL.searchParams.set('schedate', 'asc');
+    }
+
+    window.location.href = currentURL;
+}
